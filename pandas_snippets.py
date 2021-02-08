@@ -1,6 +1,8 @@
 Pandas snippets
 
------Dates
+#--------------------------------
+#-----Dates
+#--------------------------------
 mydateparser = lambda x: pd.datetime.strptime(x, "%d/%m/%Y %H:%M")
 normdate = lambda c: (c.str.split(' ',expand=True) )[0]
 normdate2 = lambda c: c.dt.strftime('%Y/%m/%d')
@@ -23,7 +25,9 @@ def quarter(month): #trimestre
     q = "Q1" if m<4 else "Q2" if m<7 else "Q3" if m<10 else "Q4"
     return year + '-' + q
 
------ Zeppelin
+#--------------------------------
+#----- Zeppelin
+#--------------------------------
 z.show
 sqlContext.createDataFrame(df).registerTempTable("raw")
 
@@ -33,7 +37,9 @@ from raw
 where numero_client = ${id_client=243333} 
 order by date_debut
 
------ imports exports 
+#--------------------------------
+#----- imports exports 
+#--------------------------------
 #parquet
 df.to_parquet("...",  compression='gzip')
 df = pd.read_parquet("...")
@@ -47,7 +53,9 @@ orders_exp.drop(columns=['order_id'], inplace = True)
 orders_exp.reset_index(inplace=True)
 orders_exp.to_sql('Orders_all', engine, if_exists="replace")
 
------ infos sur le dataframe
+#--------------------------------
+#----- infos sur le dataframe
+#--------------------------------
 def nunique(df, col):
     return df.groupby('statut').agg({df.columns[0]: 'count'})
 
@@ -55,7 +63,9 @@ df.info()
 
 df.shape[0]     #rows
 
------ filtres  |  sort/tri   | duplicates
+#--------------------------------
+#----- filtres  |  sort/tri   | duplicates
+#--------------------------------
 df = df[~ df.code_selection.isin(selection_code_to_drop)]
 
 df.query("date_fin > date_debut", inplace=True) 
@@ -67,7 +77,9 @@ df2 = df.drop_duplicates(subset=['order_id','sku'])
 
 df.sort_values(by=['numero_client', 'date_debut'], inplace=True)
 
------ filtres functions
+#--------------------------------
+#----- filtres functions
+#--------------------------------
 def filtr(df, func, comment):
     rows_before = df.shape[0]
     df2 = func(df)
@@ -81,18 +93,24 @@ def keep_on_query(df, query, comment):
 def remove_where_empty_col(df, col):
     return filtr(df2, lambda df : df.dropna(subset=[col]), col + ' vide')
 
------- operations sur plusieurs df
+#--------------------------------
+#------ operations sur plusieurs df
+#--------------------------------
  pd.concat([...])
 
-
------- apply
+#--------------------------------
+#------ apply
+#--------------------------------
 df.apply(rowfunc, axis=1)
 
------- types 
+#--------------------------------
+#------ types 
+#--------------------------------
 dfp = dfp.astype({"numero_client":"int64"})
 
-
------- groupby
+#--------------------------------
+#------ groupby
+#--------------------------------
 grouped = df.groupby(df.Name)
 Tanya = grouped.get_group("Tanya")
 for name, group in grouped:
@@ -127,8 +145,14 @@ cus = temp.agg({
     'order_date': concat
 })
 
-
------- merge, join innerjoin ...
+#--------------------------------
+#------ merge, join innerjoin ...
+#--------------------------------
 CA = pd.merge(CA,acquisition,on='first_month',how='left')
 
 
+#--------------------------------
+#------ change value on condition (max, substring, ...)
+#--------------------------------
+df.loc[df['type_abo'].str.contains("365"), "facturation"] = "Annuel"
+df['a'].where(df['a'] <= maxVal, maxVal) 
