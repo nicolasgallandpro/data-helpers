@@ -1,4 +1,7 @@
-Pandas snippets
+from datetime import date,datetime
+import datetime as dt
+from dateutil.relativedelta import *
+
 
 #--------------------------------
 #-----Dates
@@ -10,6 +13,7 @@ normdate2 = lambda c: c.dt.strftime('%Y/%m/%d')
 df["mois_fin"] = df['date_fin'].dt.to_period('M')
 df["mois_fin"] = pd.to_datetime(df['date_fin'],format='%Y-%m-%d').dt.to_period('M')
 
+today = date.today()
 def parse_date(datestr):
     return dt.datetime.strptime(datestr, '%Y-%m-%d').date()
 def diff_month(d1, d2):
