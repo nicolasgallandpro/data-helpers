@@ -10,14 +10,21 @@ normdate2 = lambda c: c.dt.strftime('%Y/%m/%d')
 df["mois_fin"] = df['date_fin'].dt.to_period('M')
 df["mois_fin"] = pd.to_datetime(df['date_fin'],format='%Y-%m-%d').dt.to_period('M')
 
+def parse_date(datestr):
+    return dt.datetime.strptime(datestr, '%Y-%m-%d').date()
 def diff_month(d1, d2):
     return (d1.year - d2.year) * 12 + d1.month - d2.month
-def plus1month(d):
+def plus_1_month(d):
     return d+relativedelta(months=+1)
-def dernierjourmois(d):
+def premier_jour_mois(d):
+    return d.replace(day=1) # TODO: pb avec les heures ?
+def dernier_jour_mois(d):
     return (d.replace(day=1)+relativedelta(months=+1))-dt.timedelta(days=1)
-def dernierjourmoissuivant(d):
-    return dernierjourmois(plus1month(d))
+def dernier_jour_mois_suivant(d):
+    return dernier_jour_mois(plus_1_month(d))
+def dernier_jour_mois_precedent(d):
+    return d.replace(day=1)-dt.timedelta(days=1)
+fix_month = lambda c: c.strftime('%Y-%m')
 
 def quarter(month): #trimestre
     year, m = month.split('-')
