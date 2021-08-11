@@ -102,7 +102,7 @@ def keep_on_query(df, query, comment):
     return filtr(df, lambda x: x.query(query), comment)
 
 def remove_where_empty_col(df, col):
-    return filtr(df2, lambda df : df.dropna(subset=[col]), col + ' vide')
+    return filtr(df, lambda df : df.dropna(subset=[col]), col + ' vide')
 
 #--------------------------------
 #------ operations sur plusieurs df
