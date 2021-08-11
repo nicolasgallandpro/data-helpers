@@ -68,7 +68,8 @@ orders_exp.to_sql('Orders_all', engine, if_exists="replace")
 #----- infos sur le dataframe
 #--------------------------------
 def nunique(df, col):
-    return df.groupby('statut').agg({df.columns[0]: 'count'})
+    dfout = df.fillna('NAN').groupby(col).agg({df.columns[0]: 'count'})
+nunique(df,'origine_abonnement').sort_values(by='code_client').reset_index().to_numpy()
 
 df.info()
 
