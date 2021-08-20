@@ -4,7 +4,15 @@ from dateutil.relativedelta import *
 
 
 #--------------------------------
-#-----Dates
+#----- Special
+#--------------------------------
+pd.eval('RMSE = df.MSE ** 0.5', target=df)
+
+s1 = pd.Series([1, 2, 3, np.nan, 5])
+s1.interpolate()
+
+#--------------------------------
+#----- Dates
 #--------------------------------
 mydateparser = lambda x: pd.datetime.strptime(x, "%d/%m/%Y %H:%M")
 normdate = lambda c: (c.str.split(' ',expand=True) )[0]
