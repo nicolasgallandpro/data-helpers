@@ -11,6 +11,13 @@ pd.eval('RMSE = df.MSE ** 0.5', target=df)
 s1 = pd.Series([1, 2, 3, np.nan, 5])
 s1.interpolate()
 
+
+#--------------------------------
+#----- encoding dingueries
+#--------------------------------
+df2 = pd.read_csv("file.txt", sep='\t', encoding='windows-1252')
+df2 = pd.read_csv("file.txt", sep='\t', encoding='utf-8')
+
 #--------------------------------
 #----- Dates
 #--------------------------------
