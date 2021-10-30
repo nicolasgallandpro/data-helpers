@@ -1,3 +1,12 @@
+#---------------- Python 3.7
+# data class
+from dataclasses import dataclass
+@dataclass
+class C:
+    a: int       # 'a' has no default value
+    b: int = 0 
+
+print(f" {C(a=5)=}  {C(a=5).a=}")
 
 #---------------- Python 3.8
 # walrus (affectation)
@@ -23,6 +32,7 @@ def greet_all(names: list[str]) -> None:
     for name in names:
         print("Hello", name)
 
+"""
 #----------------- Python 3.10
 # match case simple
 
@@ -65,3 +75,4 @@ for d in [dict_a, dict_b, "test"]:
         
         case _:
             print("no match")
+"""
