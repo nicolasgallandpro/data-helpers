@@ -177,6 +177,9 @@ cus = temp.agg({
 #--------------------------------
 CA = pd.merge(CA,acquisition,on='first_month',how='left')
 
+#remplace les na par la valeur d'une autre colonne:
+final.email = final.email.combine_first(final['ID Utilisateur'])
+
 
 #--------------------------------
 #------ change value on condition (max, substring, ...)
