@@ -82,9 +82,12 @@ orders_exp.to_sql('Orders_all', engine, if_exists="replace")
 #--------------------------------
 #----- infos sur le dataframe
 #--------------------------------
-def nunique(df, col):
-    return df.fillna('NAN').groupby(col).agg({df.columns[0]: 'count'})
-nunique(df,'origine_abonnement').sort_values(by='code_client').reset_index().to_numpy()
+#def nunique(df, col):
+#    return df.fillna('NAN').groupby(col).agg({df.columns[0]: 'count'})
+#nunique(df,'origine_abonnement').sort_values(by='code_client').reset_index().to_numpy()
+#===> à la place ::
+df.column.value_counts() #normalize=True (%tage)   bins=3 (pour les catégories)   dropna=False/True
+
 
 df.info()
 
