@@ -21,6 +21,13 @@ df2 = pd.read_csv("file.txt", sep='\t', encoding='utf-8')
 #--------------------------------
 #----- Dates
 #--------------------------------
+
+#!!! magic :
+def parse_dates(df, cols):
+    for col in cols:
+        df[col] = pd.to_datetime(df[col], infer_datetime_format=True) 
+
+# pas magic
 mydateparser = lambda x: pd.datetime.strptime(x, "%d/%m/%Y %H:%M")
 df = pd.read_csv(file, sep='\t', parse_dates = ['DATE_DEBUT'], date_parser=mydateparser)
 
