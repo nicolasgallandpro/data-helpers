@@ -52,7 +52,8 @@ def dernier_jour_mois_suivant(d):
     return dernier_jour_mois(plus_1_month(d))
 def dernier_jour_mois_precedent(d):
     return d.replace(day=1)-dt.timedelta(days=1)
-fix_month = lambda c: c.strftime('%Y-%m')
+fix_month = lambda c: c.strftime('%Y-%m') #voir ligne en dessous
+customersXmonth_enrich[START_MONTH] = customersXmonth_enrich[START_MONTH].dt.strftime('%Y-%m')
 
 def quarter(month): #trimestre
     year, m = month.split('-')
