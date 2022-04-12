@@ -98,6 +98,8 @@ orders_exp.to_sql('Orders_all', engine, if_exists="replace")
 #===> à la place ::
 df.column.value_counts() #normalize=True (%tage)   bins=3 (pour les catégories)   dropna=False/True
 
+# création de "classes" de valeurs: 
+df.column.value_counts(bins=3)
 
 df.info()
 
