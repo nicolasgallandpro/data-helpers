@@ -100,9 +100,20 @@ df.column.value_counts() #normalize=True (%tage)   bins=3 (pour les catégories)
 
 # création de "classes" de valeurs: 
 df.column.value_counts(bins=3)
+
+#qcut
 pd.qcut(df['ext price'], q=10, precision=0) # !!!!! QCUT !!!!
 #Quantile-based discretization function.
 #Discretize variable into equal-sized buckets based on rank or based on sample quantiles. For example 1000 values for 10 quantiles would produce a Categorical object indicating quantile membership for each data point.
+
+#cut
+cut_labels_4 = ['silver', 'gold', 'platinum', 'diamond']
+cut_bins = [0, 70000, 100000, 130000, 200000]
+df['cut_ex1'] = pd.cut(df['ext price'], bins=cut_bins, labels=cut_labels_4)
+#The major distinction is that qcut will calculate the size of each bin in order to make sure the distribution of data in the bins is equal. 
+#In other words, all bins will have (roughly) the same number of observations but the bin range will vary.
+
+On the other hand, cut is used to specifically define the bin edges. There is no guarantee about the distribution of items in each bin
 
 df.info()
 
