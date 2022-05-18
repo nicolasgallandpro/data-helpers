@@ -2,6 +2,19 @@ from datetime import date,datetime
 import datetime as dt
 from dateutil.relativedelta import *
 
+#--------------------------------
+#----- Non pandas, system
+#--------------------------------
+# import de custom modules qui fonctionnent meme sous dagster, et reload systématique
+import sys, importlib
+sys.path.append('/workspace/TETU/mailchimp_sync')
+import functions
+importlib.reload(functions)
+
+# liste tous les fichiers d'un dossier, list all files of a directory
+from os import listdir
+from os.path import isfile, join
+all_files = lambda path:[f for f in listdir(path) if isfile(join(path, f))]
 
 #--------------------------------
 #----- Special
@@ -10,12 +23,6 @@ pd.eval('RMSE = df.MSE ** 0.5', target=df)
 
 s1 = pd.Series([1, 2, 3, np.nan, 5])
 s1.interpolate()
-
-# liste tous les fichiers d'un dossier, list all files of a directory
-from os import listdir
-from os.path import isfile, join
-all_files = lambda path:[f for f in listdir(path) if isfile(join(path, f))]
-
 
 #--------------------------------
 #----- encoding dingueries
