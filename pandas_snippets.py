@@ -46,7 +46,7 @@ df = pd.read_csv(file, sep='\t', parse_dates = ['DATE_DEBUT'], date_parser=mydat
 normdate = lambda c: (c.str.split(' ',expand=True) )[0]
 normdate2 = lambda c: c.dt.strftime('%Y/%m/%d')
 
-df["mois_fin"] = df['date_fin'].dt.to_period('M')
+df["mois_fin"] = df['date_fin'].dt.to_period('M') # to month
 df["mois_fin"] = pd.to_datetime(df['date_fin'],format='%Y-%m-%d').dt.to_period('M') #parfois ne marche pas !!??
 
 today = date.today()
