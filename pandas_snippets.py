@@ -34,6 +34,8 @@ df2 = pd.read_csv("file.txt", sep='\t', encoding='utf-8')
 #----- Dates
 #--------------------------------
 
+pd.Timestamp('NaT') #not a time
+
 #!!! magic :
 def parse_dates(df, cols):
     for col in cols:
@@ -227,3 +229,8 @@ final.email = final.email.combine_first(final['ID Utilisateur'])
 #--------------------------------
 df.loc[df['type_abo'].str.contains("365"), "facturation"] = "Annuel"
 df['a'].where(df['a'] <= maxVal, maxVal) 
+
+#--------------------------------
+#------ graphiques
+#--------------------------------
+df.plot(figsize=(12,8))
