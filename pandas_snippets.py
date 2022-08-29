@@ -50,6 +50,8 @@ normdate2 = lambda c: c.dt.strftime('%Y/%m/%d')
 
 df["mois_fin"] = df['date_fin'].dt.to_period('M') # to month
 df["mois_fin"] = pd.to_datetime(df['date_fin'],format='%Y-%m-%d').dt.to_period('M') #parfois ne marche pas !!??
+#autre solution (meilleure ?):
+df['date_fin'].dt.floor('d') - pd.offsets.MonthBegin(n=1)
 
 today = date.today()
 def parse_date(datestr):
