@@ -54,7 +54,7 @@ def markdown_describe(df):
     return md
 
 
-def dagster_observation_metadata(context, observation={}, asset_name=None, df='none'):
+def dagster_observation_metadata(context,  df='none', observation={}):
     """send metadata (observation) to dagster for a given asset"""
     if isinstance(df, pd.DataFrame) :
         observation['Colonnes'] = str(list(df.columns))
@@ -68,11 +68,10 @@ def dagster_observation_metadata(context, observation={}, asset_name=None, df='n
             observation[key] = int(value)
 
     # appele la fonction de dagster
-    asset_name = asset_name or get_calling_function_name()
+    asset_name = context.asset_key_for_output().to_user_string()
     context.log_event(
         AssetObservation(asset_name, metadata=observation)
     )
-    print('observation', asset_name)
     return df
 
 
