@@ -7,12 +7,6 @@ from collections.abc import Iterable
 from typing import Union
 
 
-def get_calling_function_name():
-    """return the name of the calling calling (2 levels) method"""
-    outerframe = inspect.currentframe().f_back.f_back
-    return outerframe.f_code.co_name
-
-
 def markdown_describe(df):
     """A markdown description of a dataframe"""
     md = '### Rows\n'
@@ -54,27 +48,6 @@ def markdown_describe(df):
     return md
 
 
-def dagster_observation_metadata(context,  df='none', observation={}):
-    """send metadata (observation) to dagster for a given asset"""
-    if isinstance(df, pd.DataFrame) :
-        observation['Colonnes'] = str(list(df.columns))
-        observation['Nb de lignes'] = len(df)
-        observation['Memory (Mb)'] = df.memory_usage(deep=True).sum() / (1024*1024)
-        observation['Describe'] = MetadataValue.md(markdown_describe(df))
-
-    # fait la conversion vers des types que dagster reconnait
-    for key, value in observation.items():
-        if ('int64') in str(type(value)):
-            observation[key] = int(value)
-
-    # appele la fonction de dagster
-    asset_name = context.asset_key_for_output().to_user_string()
-    context.log_event(
-        AssetObservation(asset_name, metadata=observation)
-    )
-    return df
-
-
 def get_asset(asset_name):
     try:
         out = []
@@ -84,33 +57,41 @@ def get_asset(asset_name):
     except:
         return pd.read_pickle(f'/opt/dagster/dagster_home/storage/{asset_name}')
 
-
-class LocalParquetIOManager(IOManager):
-    #def _get_path(self, context):
-    #    return os.path.join(context.run_id, context.step_key, context.name)
-    def _get_path(self, context) -> str:
-        """Automatically construct filepath."""
-        if context.has_asset_key:
-            path = context.get_asset_identifier()
-        else:
-            path = context.get_identifier()
-        fullpath = os.path.join('/workspace/gitignore_data/', *path) + '.parquet'
-        directory = os.path.dirname(fullpath)
-        print(directory)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        return fullpath
-
-    def handle_output(self, context, obj):
-        obj.to_parquet(self._get_path(context))
-
-    def load_input(self, context):
-        return pd.read_parquet(self._get_path(context.upstream_output))
-    
 def get_parquet_asset(asset_name):
-    return pd.read_parquet('/workspace/gitignore_data/'+asset_name+'.parquet')
-
+    return pd.read_parquet('/workspace/gitignore_data/'\
+                           +asset_name.replace(' ','')+'.parquet')
 
 @io_manager
 def local_parquet_io_manager():
+    class LocalParquetIOManager(IOManager):
+        def _get_path(self, context) -> str:
+            """Automatically construct filepath."""
+            if context.has_asset_key:
+                path = context.get_asset_identifier()
+            else:
+                path = context.get_identifier()
+            fullpath = os.path.join('/workspace/gitignore_data/', *path) + '.parquet'
+            directory = os.path.dirname(fullpath)
+            print(directory)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            return fullpath
+
+        def handle_output(self, context, df):
+            metadata = {}
+            metadata['Colonnes'] = str(list(df.columns))
+            metadata['Nb de lignes'] = len(df)
+            metadata['Memory (Mb)'] = df.memory_usage(deep=True).sum() / (1024*1024)
+            metadata['Describe'] = MetadataValue.md(markdown_describe(df))
+
+            # fait la conversion vers des types que dagster reconnait
+            for key, value in metadata.items():
+                if ('int64') in str(type(value)):
+                    observation[key] = int(value)
+
+            context.add_output_metadata(metadata)
+            df.to_parquet(self._get_path(context))
+
+        def load_input(self, context):
+            return pd.read_parquet(self._get_path(context.upstream_output))
     return LocalParquetIOManager()
