@@ -19,7 +19,6 @@ def markdown_describe(df):
     if (len(df) == 0 or len(df.columns) == 0):
         return md
 
-    md += '### Columns\n'
     md += '  \n'
      # stats sur les colonnes
     def most_common_value(col):
@@ -29,22 +28,29 @@ def markdown_describe(df):
         except:
             print("colonne qui bug :", col)
             return '?'
+    md += '\n  \n  '
+    
+    if len(df)<100 and len(df.columns) < 15:
+        return md + '### Dataframe \n' + df.to_markdown()
+    
+    md += '### Head 5\n'
+    md += df.head(5).to_markdown()
+    md += '\n  \n  ' 
+    md += '### Columns\n'
     stats = pd.DataFrame(
         [
             ['dtype']+[str(t) for t in df.dtypes],
+            ['fill rate']+[  (str(round(100.* (~pd.isnull(df[col])).sum() / len(df[col]), 2)) + ' %')   for col in df.columns],
+            ['most common value']+[  most_common_value(c)   for c in df.columns],
             ['uniques values']+[len(df[c].unique()) for c in df.columns],
-            ['% uniques values']+[str(round(100. * len(df[c].unique()) / len(df),1))+'%' for c in df.columns],
-            ['most common value']+[  most_common_value(c)   for c in df.columns]
-        ], columns = ['__STAT__']+ list(df.columns)).set_index('__STAT__')
+            ['% uniques values']+[str(round(100. * len(df[c].unique()) / len(df),1))+'%' for c in df.columns]
+        ], columns = ['__STAT__']+ list(df.columns)).set_index('__STAT__').transpose()
     md += stats.to_markdown()
     md += '\n  \n  ' 
 
     md += '### Numerical columns\n'
     md += df.describe().to_markdown()
 
-    md += '\n  \n  '
-    md += '### Head 3\n'
-    md += df.head(3).to_markdown()
     return md
 
 
