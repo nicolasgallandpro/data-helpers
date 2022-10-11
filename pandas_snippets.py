@@ -60,14 +60,13 @@ def diff_month(d1, d2):
     return (d1.year - d2.year) * 12 + d1.month - d2.month
 def plus_1_month(d):
     return d+relativedelta(months=+1)
-def premier_jour_mois(d):
-    return d.replace(day=1) # TODO: pb avec les heures ?
-def dernier_jour_mois(d):
-    return (d.replace(day=1)+relativedelta(months=+1))-dt.timedelta(days=1)
-def dernier_jour_mois_suivant(d):
-    return dernier_jour_mois(plus_1_month(d))
-def dernier_jour_mois_precedent(d):
-    return d.replace(day=1)-dt.timedelta(days=1)
+#### !!!!!!!!!!! fixed version : prend vraiment la fin du mois
+premier_jour_mois = lambda mydate:datetime(mydate.year, mydate.month, 1) + relativedelta(months=0, days=0)
+dernier_jour_mois = lambda mydate:datetime(mydate.year, mydate.month, 1) + relativedelta(months=1, seconds=-1)
+dernier_jour_mois_precedent = lambda mydate:datetime(mydate.year, mydate.month, 1) + relativedelta(months=0, seconds=-1)
+dernier_jour_mois_suivant = lambda mydate: datetime(mydate.year, mydate.month, 1) + relativedelta(months=2, seconds=-1)
+
+
 fix_month = lambda c: c.strftime('%Y-%m') #voir ligne en dessous
 customersXmonth_enrich[START_MONTH] = customersXmonth_enrich[START_MONTH].dt.strftime('%Y-%m')
 
