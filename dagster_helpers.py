@@ -67,8 +67,28 @@ def get_parquet_asset(asset_name):
     return pd.read_parquet('/workspace/gitignore_data/'\
                            +asset_name.replace(' ','')+'.parquet')
 
+
+
+def deleted_rows_recorder(start):
+    """Helper that make a dict recording rows deleted in every step """
+    rec = {}
+    supprs = []
+    def record(txt=None, rows=None):
+        if txt==None and rows==None:
+            return rec
+        rows = len(rows) if type(rows) == pd.DataFrame else rows
+        sup = start - sum(supprs) - rows
+        rec[txt] = sup
+        supprs.append(sup)
+        
+        return rec
+    return record
+
+
+    
 @io_manager
 def local_parquet_io_manager():
+    
     class LocalParquetIOManager(IOManager):
         def _get_path(self, context) -> str:
             """Automatically construct filepath."""
@@ -83,8 +103,25 @@ def local_parquet_io_manager():
                 os.makedirs(directory)
             return fullpath
 
-        def handle_output(self, context, df):
-            metadata = {}
+        
+        def handle_output(self, context, var):
+            """handle the output of the asset (a dataframe or a dataframe and a metadata dict) """
+            
+            def _get_meta_and_df(var): #helper
+                if type(var) == pd.DataFrame:
+                    return {},var
+                try:
+                    if len(var) == 2:
+                        var1, var2 = var
+                        if type(var1) == type({}) and type(var2) == pd.DataFrame:
+                            return var1, var2
+                        elif type(var2) == type({}) and type(var1) == pd.DataFrame:
+                            return var2,var1    
+                    raise Exception("l'objet retourné au local_parquet_io_manager doit être un dataframe ou un iterable contenant un dictionnaire de meta et un dataframe")
+                except e:
+                    raise e
+            
+            metadata, df = _get_meta_and_df(var)
             metadata['Colonnes'] = str(list(df.columns))
             metadata['Nb de lignes'] = len(df)
             metadata['Memory (Mb)'] = df.memory_usage(deep=True).sum() / (1024*1024)
