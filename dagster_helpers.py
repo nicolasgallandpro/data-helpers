@@ -122,7 +122,7 @@ def local_parquet_io_manager():
                     raise e
             
             metadata, df = _get_meta_and_df(var)
-            metadata['Colonnes'] = str(list(df.columns))
+            metadata['Colonnes'] = MetadataValue.md(df.dtypes.to_markdown())
             metadata['Nb de lignes'] = len(df)
             metadata['Memory (Mb)'] = df.memory_usage(deep=True).sum() / (1024*1024)
             metadata['Describe'] = MetadataValue.md(markdown_describe(df))
