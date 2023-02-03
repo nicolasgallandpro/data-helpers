@@ -7,7 +7,7 @@ from dateutil.relativedelta import *
 #--------------------------------
 # import de custom modules qui fonctionnent meme sous dagster, et reload systématique
 import sys, importlib
-sys.path.append('/workspace/TETU/mailchimp_sync')
+sys.path.append('/workspace/')
 import functions
 importlib.reload(functions)
 
