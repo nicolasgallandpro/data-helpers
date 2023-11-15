@@ -7,6 +7,12 @@ from collections.abc import Iterable
 from typing import Union
 
 
+#The context object now has an asset_key property to get the AssetKey of the current asset.
+
+#récupérer la valeur des assets
+#from repos import defs
+#defs.load_asset_value('offer_infos')
+
 def markdown_describe(df):
     """A markdown description of a dataframe"""
     md = '### Rows\n'
