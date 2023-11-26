@@ -24,8 +24,9 @@ def nabisco_cereals_df(nabisco_cereals):
 asset1_job = define_asset_job(name="asset1_job", selection=["nabisco_cereals", 'nabisco_cereals_df'])
 job1_schedule = ScheduleDefinition(job=asset1_job, cron_schedule="0 0 * * *")
 
-@repository
-def repo():
-    return [cereals, nabisco_cereals, nabisco_cereals_df, \
-        job1_schedule, asset1_job]
-
+defs = Definitions(
+    assets= ["nabisco_cereals", 'nabisco_cereals_df']s,
+    #resources={"local_parquet_io_manager": local_parquet_io_manager},
+    jobs=[asset1_job],
+    schedules=[job1_schedule]
+)
