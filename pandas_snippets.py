@@ -19,7 +19,13 @@ all_files = lambda path:[f for f in listdir(path) if isfile(join(path, f))]
 #--------------------------------
 #----- Special
 #--------------------------------
-pd.eval('RMSE = df.MSE ** 0.5', target=df)
+
+df.assign(
+    tenXValue=lambda df_: df_.value * 10,
+    hundredXValue=lambda df_: df_.value * 100
+)
+
+pd.eval('RMSE = df.MSE ** 0.5', target=df) # bof 
 
 s1 = pd.Series([1, 2, 3, np.nan, 5])
 s1.interpolate()
