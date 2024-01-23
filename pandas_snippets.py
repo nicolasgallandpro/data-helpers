@@ -188,6 +188,13 @@ dfp = dfp.astype({"numero_client":"int64"})
 #--------------------------------
 #------ groupby
 #--------------------------------
+!!!!!!
+df.groupby("genre", as_index=False).agg(
+   salaire_median=("salaire","median"),
+   taille_moyenne=("taille","mean")
+)
+
+
 grouped = df.groupby(df.Name)
 Tanya = grouped.get_group("Tanya")
 for name, group in grouped:
