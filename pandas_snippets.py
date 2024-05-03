@@ -16,6 +16,14 @@ from os import listdir
 from os.path import isfile, join
 all_files = lambda path:[f for f in listdir(path) if isfile(join(path, f))]
 
+
+#--------------------------------
+#----- Dagster
+#--------------------------------
+#récupérer les assets matérialisés
+from repos import defs
+defs.load_asset_value('all_users_ids_abonnes')
+
 #--------------------------------
 #----- Special
 #--------------------------------
