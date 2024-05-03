@@ -60,6 +60,8 @@ def markdown_describe(df):
     return md
 
 
+#from repos import defs
+#defs.load_asset_value('all_users_ids_abonnes')
 def get_asset(asset_name):
     try:
         out = []
@@ -69,6 +71,8 @@ def get_asset(asset_name):
     except:
         return pd.read_pickle(f'/opt/dagster/dagster_home/storage/{asset_name}')
 
+#from repos import defs
+#defs.load_asset_value('all_users_ids_abonnes')
 def get_parquet_asset(asset_name):
     return pd.read_parquet('/workspace/gitignore_data/'\
                            +asset_name.replace(' ','')+'.parquet')
