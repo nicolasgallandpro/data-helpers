@@ -140,7 +140,9 @@ def local_parquet_io_manager():
             # fait la conversion vers des types que dagster reconnait
             for key, value in metadata.items():
                 if ('int64') in str(type(value)):
-                    observation[key] = int(value)
+                    metadata[key] = int(value)
+                if ('float64') in str(type(value)):
+                    metadata[key] = float(value)
 
             context.add_output_metadata(metadata)
             df.to_parquet(self._get_path(context))
