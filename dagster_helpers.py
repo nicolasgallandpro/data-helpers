@@ -100,17 +100,16 @@ def deleted_rows_recorder(start):
 def local_parquet_io_manager():
     
     class LocalParquetIOManager(IOManager):
+       class LocalParquetIOManager(IOManager):
         def _get_path(self, context) -> str:
             """Automatically construct filepath."""
-            if context.has_asset_key:
-                path = context.get_asset_identifier()
-            else:
-                path = context.get_identifier()
-            fullpath = os.path.join('/workspace/gitignore_data/', *path) + '.parquet'
-            directory = os.path.dirname(fullpath)
-            print(directory)
+            directory = '/workspace/gitignore_data/'
+            ide = context.get_asset_identifier if context.has_asset_key else ide = context.get_identifier()
+            if context.has_partition_key:
+                directory = directory + ide[0]
             if not os.path.exists(directory):
                 os.makedirs(directory)
+            fullpath = os.path.join(directory, ('_'.join(ide)))  + '.parquet'
             return fullpath
 
         
