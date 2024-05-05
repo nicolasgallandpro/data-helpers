@@ -104,7 +104,7 @@ def local_parquet_io_manager():
         def _get_path(self, context) -> str:
             """Automatically construct filepath."""
             directory = '/workspace/gitignore_data/'
-            ide = context.get_asset_identifier if context.has_asset_key else context.get_identifier()
+            ide = context.get_asset_identifier()
             if context.has_partition_key:
                 directory = directory + ide[0]
             if not os.path.exists(directory):
