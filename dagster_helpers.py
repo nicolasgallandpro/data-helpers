@@ -52,11 +52,16 @@ def test2_asset(context):
     # a random number between 0 and 100
     import random
     a = str(random.randint(0, 100))
-
-    yield AssetCheckResult(passed=True, asset_key="test2_asset", check_name="test_interne")
+    
+    context.add_output_metadata({"partition_day": partition_day}, output_name='result')
+    context.add_output_metadata({"partition_day2": partition_day}, output_name='result')
+    context.add_output_metadata({"partition_day3": partition_day}, output_name='result')
+    #context.add_output_metadata({"metacheck_interne": 4}, output_name='test2_asset_test_interne') #devrait fonctionner mais ne fonctionne pas
 
     yield Output(value="test2 "+partition_day + a, 
                  metadata={"partition_day": partition_day})
+    
+    yield AssetCheckResult(passed=True, asset_key="test2_asset", check_name="test_interne", metadata={'truc':5})
 
 
 ################## Méthode 2 : check à l'extérieur de l'asset
